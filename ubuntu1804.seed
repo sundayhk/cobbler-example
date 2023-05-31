@@ -1,0 +1,77 @@
+### Preseed for Ubuntu 18.04 LTS ###
+
+# Install language packs
+d-i debian-installer/locale string en_US.UTF-8
+
+# Keyboard selection
+d-i keyboard-configuration/xkb-keymap select us
+
+# Network configuration
+d-i netcfg/choose_interface select auto
+d-i netcfg/get_hostname string ubuntu
+d-i netcfg/disable_autoconfig boolean true
+d-i netcfg/dhcp_failed note
+d-i netcfg/dhcp_options select Configure network manually
+d-i netcfg/get_ipaddress string
+d-i netcfg/get_netmask string
+d-i netcfg/get_gateway string
+d-i netcfg/get_nameservers string
+d-i netcfg/confirm_static boolean true
+
+# Mirror settings
+d-i mirror/country string manual
+d-i mirror/http/hostname string mirrors.aliyun.com
+d-i mirror/http/directory string /ubuntu
+d-i mirror/http/proxy string 
+
+# Clock and time zone setup
+d-i clock-setup/utc boolean true
+d-i time/zone string US/Pacific
+
+# Partitioning
+d-i partman-auto/method string regular
+d-i partman-auto/expert_recipe string \
+    boot-root :: \
+        512 512 512 ext4 \
+            $primary{ } \
+            $bootable{ } \
+            method{ format } \
+            format{ } \
+            use_filesystem{ } \
+            filesystem{ ext4 } \
+            mountpoint{ /boot } \
+        . \
+        10000 30000 -1 xfs \
+            $primary{ } \
+            method{ format } \
+            format{ } \
+            use_filesystem{ } \
+            filesystem{ xfs } \
+            mountpoint{ / } \
+        .
+d-i partman-auto/choose_recipe boot-root
+d-i partman/default_filesystem ext4
+d-i partman-partitioning/confirm_write_new_label boolean true
+d-i partman/choose_partition select finish
+d-i partman/confirm boolean true
+d-i partman/confirm_nooverwrite boolean true
+
+# System package selection
+tasksel tasksel/first multiselect standard
+d-i pkgsel/include string openssh-server build-essential
+
+# Package selection
+tasksel tasksel/first multiselect standard
+d-i pkgsel/include string openssh-server build-essential
+d-i pkgsel/update-policy select none
+d-i pkgsel/upgrade select none
+
+# User account
+d-i passwd/user-fullname string Ubuntu User
+d-i passwd/username string xwx
+d-i passwd/user-password password Star-xwx
+d-i passwd/user-password-again password Star-xwx
+d-i user-setup/encrypt-home boolean false
+
+# Finish installation
+d-i finish-install/reboot_in_progress note
