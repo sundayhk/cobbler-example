@@ -68,9 +68,9 @@ d-i pkgsel/upgrade select none
 
 # User account
 d-i passwd/user-fullname string Ubuntu User
-d-i passwd/username string xwx
-d-i passwd/user-password password Star-xwx
-d-i passwd/user-password-again password Star-xwx
+d-i passwd/username string ubuntu
+d-i passwd/user-password password insecure
+d-i passwd/user-password-again password insecure
 d-i user-setup/encrypt-home boolean false
 
 # Finish installation
